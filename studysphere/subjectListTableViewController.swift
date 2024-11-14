@@ -8,9 +8,20 @@
 import UIKit
 
 class subjectListTableViewController: UITableViewController {
+    
+    var subjects: [Subject] = [] {
+            didSet {
+                saveSubjects()
+            }
+        }
    
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadSubjects()
+        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showAddSubjectModal))
+                navigationItem.rightBarButtonItem = addButton
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -18,6 +29,37 @@ class subjectListTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    @objc func showAddSubjectModal() {
+          let addSubjectVC = AddSubjectViewController()
+          addSubjectVC.modalPresentationStyle = .pageSheet
+          if let sheet = addSubjectVC.sheetPresentationController {
+              sheet.detents = [.medium()]
+              sheet.prefersGrabberVisible = true
+          }
+          
+        addSubjectVC.onSubjectAdded = { [weak self] newSubjectName in
+            let newSubject = Subject(name: newSubjectName)
+            self?.subjects.append(newSubject)  // Add the new subject to the data source
+            self?.tableView.reloadData()  // Reload the table view to show the new subject
+        }
+
+          present(addSubjectVC, animated: true, completion: nil)
+      }
+    
+    private func saveSubjects() {
+            if let encoded = try? JSONEncoder().encode(subjects) {
+                UserDefaults.standard.set(encoded, forKey: "subjects")
+            }
+        }
+    
+    private func loadSubjects() {
+           if let savedData = UserDefaults.standard.data(forKey: "subjects"),
+              let decodedSubjects = try? JSONDecoder().decode([Subject].self, from: savedData) {
+               subjects = decodedSubjects
+           }
+       }
+    
 
     // MARK: - Table view data source
 
@@ -27,7 +69,7 @@ class subjectListTableViewController: UITableViewController {
     }
 
 override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 10
+    return subjects.count
 }
 
 override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -35,6 +77,25 @@ override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexP
     cell.subjectListButton.setTitle("Subject \(indexPath.row)", for: .normal) 
     return cell
 }
+    
+    
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70 // Adjust this value as needed
+    }
+    
+    
+    
+    
+    
+
+}
+    
+    
+    
+    
+    
+    
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
@@ -91,8 +152,4 @@ override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexP
     */
     
     // Set the height for each row to add spacing
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70 // Adjust this value as needed
-    }
-
-}
+    

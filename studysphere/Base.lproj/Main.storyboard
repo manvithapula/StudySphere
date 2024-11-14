@@ -543,6 +543,7 @@
                         <outlet property="spacedRepetitionCompletedLabel" destination="FsP-sy-ucw" id="4eR-YA-9kj"/>
                         <outlet property="spacedRepetitionProgressLabel" destination="ZXK-V4-LNm" id="6H1-r3-C9i"/>
                         <outlet property="spacedRepetitionTextView" destination="XWe-Ma-ORG" id="F4j-F1-4S8"/>
+                        <outlet property="streakLabel" destination="RK3-ZA-ErL" id="Pos-7W-jfa"/>
                         <outlet property="studyTechniques" destination="oDs-jD-CC1" id="KjK-oc-trG"/>
                         <outlet property="studyTechniquesStackView" destination="3ch-l3-mTz" id="NlD-vK-U6s"/>
                         <outlet property="subject1" destination="7ex-2D-cmi" id="o9c-vU-ZP6"/>
@@ -619,7 +620,9 @@
                             <outlet property="delegate" destination="t49-nW-ykK" id="ohj-fx-PWu"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="OAH-yn-YG3"/>
+                    <navigationItem key="navigationItem" id="OAH-yn-YG3">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="dll-3G-guc"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TXM-Cc-caX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
